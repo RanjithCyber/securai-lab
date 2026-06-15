@@ -1,0 +1,48 @@
+Create a complete, fully functional Python (Flask) web application called "SecurAI-Lab" that serves as an AI Vulnerability Scanner and a Daily Cybersecurity Progress Tracker. The app must be highly professional, structured, and feature a trendy, modern dark-themed "cyberpunk-minimalist" user interface using Tailwind CSS and glassmorphism.
+
+Please set up the project exactly according to the following file structure and write the complete code for each file:
+
+1. app.py (Flask Backend & Database Logic)
+- Initialize an SQLite database (database.db) on startup.
+- Create two tables: 
+  * `scans` (id INTEGER PRIMARY KEY, timestamp DATETIME, code_input TEXT, language TEXT, severity TEXT, vulnerabilities_found TEXT, remediation TEXT)
+  * `pwn_metrics` (id INTEGER PRIMARY KEY, date TEXT, category TEXT, challenges_solved INTEGER, difficulty TEXT, notes TEXT)
+- Implement routes for:
+  * `/` (Dashboard: Fetches scan statistics and aggregated metric data for charts)
+  * `/scanner` (AI Scanner: Handles POST requests containing code to analyze)
+  * `/tracker` (Progress Logs: Handles GET to view and POST to log daily hacking challenges)
+  * `/api/chart-data` (JSON endpoint returning challenge trends for Chart.js)
+- Include a fallback rule-based/mock AI analysis system in the python route so the code runs immediately out of the box without breaking, but leave a clear placeholder comment for adding an LLM API key.
+
+2. static/css/style.css (Custom Trend Styling)
+- Define variables for the color palette: Deep Slate (#0f172a), Glowing Emerald Green (#10b981), and Alert Crimson (#ef4444).
+- Add custom glassmorphism utilities: `.glass-panel { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }`
+- Add a 3D-lifting hover effect micro-interaction class: `.card-3d { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; } .card-3d:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1); }`
+
+3. static/js/charts.js (Dashboard Analytics)
+- Write JavaScript that fetches from `/api/chart-data`.
+- Initialize two Chart.js graphs inside canvas elements:
+  * A Line Chart showing "Hacking Progress Over Time" (X-axis: Date, Y-axis: Challenges Solved).
+  * A Horizontal Bar Chart breaking down work by Category (Binary Exploitation, Reverse Engineering, Web Security).
+- Style the charts with neon green gradient fills and sleek grid lines matching the dark background.
+
+4. templates/base.html (Global Shell & Navigation)
+- Provide a responsive layout featuring a fixed, sticky side navigation bar with smooth hover transitions.
+- Include dependencies via CDN: Tailwind CSS, FontAwesome/Lucide icons, and Chart.js.
+- Feature a clean header with a simulated "User Profile: Security Analyst" status widget.
+
+5. templates/dashboard.html (The Metrics Hub)
+- Displays 3 grid-aligned metric summary blocks using the `.glass-panel` and `.card-3d` classes (Total Scans Run, Total Exploits Mastered, System Security Rating).
+- Displays the canvas elements for the analytics charts side-by-side.
+- Shows a "Recent Activity Feed" layout detailing the last 3 logged tasks.
+
+6. templates/scanner.html (The DevSecOps Scanner UI)
+- Create a modern split-screen panel.
+- Left side: A large code input workspace with a dropdown selection for language (Python, C, JavaScript) and a premium-looking "Analyze Code" submit button.
+- Right side: A glassmorphic output area. While loading, show a smooth pulsating scanning animation. On finish, display structured, beautiful scan results mapping out: Vulnerability Severity, Risk Explanation, and a clean Markdown-like code block showing the Remediation/Fixed version.
+
+7. templates/tracker.html (Hands-on Challenge Log)
+- An elegant split view. Left side holds a clean data-entry form with inputs for Date, Category (Dropdown), Number of Challenges Solved, Difficulty Level, and a Textarea for Notes.
+- Right side displays a responsive tabular data log showing all historical entries cleanly formatted with colored status badges (e.g., Red for High Difficulty, Green for Easy).
+
+Ensure all code blocks are fully populated with clean, commented Python, JavaScript, and HTML. Do not leave placeholder comments like '// add code here'—generate the full, working implementation ready to run instantly on Replit.

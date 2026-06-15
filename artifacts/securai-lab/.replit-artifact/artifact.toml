@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "SecurAI-Lab"
+version = "1.0.0"
+id = "artifacts/securai-lab"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22323
+
+[services.development]
+run = "pnpm --filter @workspace/securai-lab run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/securai-lab", "run", "build" ]
+publicDir = "artifacts/securai-lab/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22323"
+BASE_PATH = "/"

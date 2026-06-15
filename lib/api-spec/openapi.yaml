@@ -3,13 +3,19 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: SecurAI-Lab API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: scans
+    description: AI vulnerability scan operations
+  - name: tracker
+    description: Cybersecurity progress tracker operations
+  - name: dashboard
+    description: Dashboard statistics and analytics
 paths:
   /healthz:
     get:
@@ -24,6 +30,169 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /scans:
+    get:
+      operationId: listScans
+      tags: [scans]
+      summary: List all vulnerability scans
+      responses:
+        "200":
+          description: List of scans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Scan"
+    post:
+      operationId: createScan
+      tags: [scans]
+      summary: Run an AI vulnerability scan on code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScanInput"
+      responses:
+        "201":
+          description: Scan result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Scan"
+        "400":
+          description: Bad request
+
+  /scans/{id}:
+    get:
+      operationId: getScan
+      tags: [scans]
+      summary: Get a scan by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Scan details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Scan"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteScan
+      tags: [scans]
+      summary: Delete a scan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /metrics:
+    get:
+      operationId: listMetrics
+      tags: [tracker]
+      summary: List all progress metrics
+      responses:
+        "200":
+          description: List of progress entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Metric"
+    post:
+      operationId: createMetric
+      tags: [tracker]
+      summary: Log a daily hacking challenge entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MetricInput"
+      responses:
+        "201":
+          description: Created metric entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Metric"
+        "400":
+          description: Bad request
+
+  /metrics/{id}:
+    delete:
+      operationId: deleteMetric
+      tags: [tracker]
+      summary: Delete a metric entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [dashboard]
+      summary: Get dashboard statistics
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /dashboard/chart-data:
+    get:
+      operationId: getChartData
+      tags: [dashboard]
+      summary: Get chart data for analytics
+      responses:
+        "200":
+          description: Chart data for progress and category breakdowns
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChartData"
+
+  /dashboard/recent-activity:
+    get:
+      operationId: getRecentActivity
+      tags: [dashboard]
+      summary: Get recent scans and metrics activity feed
+      responses:
+        "200":
+          description: Recent activity items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +203,140 @@ components:
       required:
         - status
 
+    Scan:
+      type: object
+      required: [id, createdAt, codeInput, language, severity, vulnerabilitiesFound, remediation]
+      properties:
+        id:
+          type: integer
+        createdAt:
+          type: string
+        codeInput:
+          type: string
+        language:
+          type: string
+        severity:
+          type: string
+          enum: [critical, high, medium, low, none]
+        vulnerabilitiesFound:
+          type: array
+          items:
+            type: string
+        remediation:
+          type: string
+
+    ScanInput:
+      type: object
+      required: [codeInput, language]
+      properties:
+        codeInput:
+          type: string
+          minLength: 1
+        language:
+          type: string
+          enum: [python, javascript, c, java, typescript, go]
+
+    Metric:
+      type: object
+      required: [id, date, category, challengesSolved, difficulty, notes]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+        category:
+          type: string
+          enum: [binary-exploitation, reverse-engineering, web-security, cryptography, forensics, pwn, osint]
+        challengesSolved:
+          type: integer
+        difficulty:
+          type: string
+          enum: [easy, medium, hard, insane]
+        notes:
+          type: string
+
+    MetricInput:
+      type: object
+      required: [date, category, challengesSolved, difficulty]
+      properties:
+        date:
+          type: string
+        category:
+          type: string
+          enum: [binary-exploitation, reverse-engineering, web-security, cryptography, forensics, pwn, osint]
+        challengesSolved:
+          type: integer
+          minimum: 1
+        difficulty:
+          type: string
+          enum: [easy, medium, hard, insane]
+        notes:
+          type: string
+
+    DashboardStats:
+      type: object
+      required: [totalScans, totalChallengesSolved, securityRating, criticalVulns, highVulns, mediumVulns, lowVulns]
+      properties:
+        totalScans:
+          type: integer
+        totalChallengesSolved:
+          type: integer
+        securityRating:
+          type: number
+        criticalVulns:
+          type: integer
+        highVulns:
+          type: integer
+        mediumVulns:
+          type: integer
+        lowVulns:
+          type: integer
+
+    ChartData:
+      type: object
+      required: [progressOverTime, categoryBreakdown]
+      properties:
+        progressOverTime:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProgressDataPoint"
+        categoryBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategoryDataPoint"
+
+    ProgressDataPoint:
+      type: object
+      required: [date, challengesSolved]
+      properties:
+        date:
+          type: string
+        challengesSolved:
+          type: integer
+
+    CategoryDataPoint:
+      type: object
+      required: [category, count]
+      properties:
+        category:
+          type: string
+        count:
+          type: integer
+
+    ActivityItem:
+      type: object
+      required: [id, type, title, description, timestamp, severity]
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [scan, metric]
+        title:
+          type: string
+        description:
+          type: string
+        timestamp:
+          type: string
+        severity:
+          type: ["string", "null"]
