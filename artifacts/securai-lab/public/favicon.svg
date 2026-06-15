@@ -1,3 +1,42 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+  <!-- Dark background matching the app's bg (hsl(222, 47%, 7%)) -->
+  <rect width="180" height="180" rx="40" fill="#090d16" />
+  
+  <!-- Subtle border around the icon -->
+  <rect x="2" y="2" width="176" height="176" rx="38" stroke="#10b981" stroke-width="2" stroke-opacity="0.2" />
+
+  <!-- Shield Gradients -->
+  <defs>
+    <linearGradient id="shieldGrad" x1="90" y1="35" x2="90" y2="145" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="90" y1="35" x2="90" y2="145" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#059669" stop-opacity="0" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Glowing background behind the shield -->
+  <path d="M90 35 L140 50 C140 100 120 130 90 145 C60 130 40 100 40 50 Z" fill="url(#glowGrad)" filter="url(#glow)" opacity="0.3" />
+
+  <!-- Main Shield Outline -->
+  <path d="M90 35 L140 50 C140 100 120 130 90 145 C60 130 40 100 40 50 Z" stroke="url(#shieldGrad)" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="#0b0f19" fill-opacity="0.8" />
+
+  <!-- Cybernetic / AI Core inside the Shield -->
+  <path d="M90 55 L120 64 C120 95 105 116 90 127 C75 116 60 95 60 64 Z" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-width="3" stroke-dasharray="4,4" />
+
+  <!-- Glowing Core Node -->
+  <circle cx="90" cy="90" r="12" fill="#10b981" filter="url(#glow)" />
+  <circle cx="90" cy="90" r="6" fill="#ffffff" />
+  
+  <!-- Connecting Tech Lines -->
+  <line x1="90" y1="55" x2="90" y2="78" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
+  <line x1="90" y1="102" x2="90" y2="127" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
+  <line x1="60" y1="64" x2="78" y2="82" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
+  <line x1="120" y1="64" x2="102" y2="82" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
 </svg>
